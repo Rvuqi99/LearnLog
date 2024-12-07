@@ -357,6 +357,7 @@ const Home = ({navigation}) => {
                             flex: 0.7,
                             color: 'black',
                           }}
+                          multiline
                           value={question.userAnswer}
                           onChangeText={text => onChangeAnswer(index, text)}
                         />
