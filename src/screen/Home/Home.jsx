@@ -31,6 +31,7 @@ const Home = ({navigation}) => {
   );
   const [chatId, setChatId] = React.useState();
   const [questions, setQuestions] = React.useState();
+  const [noteId, setNoteId] = React.useState();
 
   const validate = () => {
     if (
@@ -58,8 +59,14 @@ const Home = ({navigation}) => {
     const resultApi = fetchApi[1];
 
     if (dataApi.status === 200) {
+      setNoteId(resultApi.noteid);
       console.log('generating question');
-      const fetchApi2 = await generateQuestion(totalQues, subject, topic);
+      const fetchApi2 = await generateQuestion(
+        totalQues,
+        resultApi.noteid,
+        subject,
+        topic,
+      );
       const dataApi2 = fetchApi2[0];
       const resultApi2 = fetchApi2[1];
 
@@ -105,7 +112,7 @@ const Home = ({navigation}) => {
     setIsLoading2(true);
     const fetchApi = await submitAnswer(
       totalQues,
-      '',
+      noteId,
       questions,
       subject,
       topic,

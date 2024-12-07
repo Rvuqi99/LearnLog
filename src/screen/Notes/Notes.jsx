@@ -30,6 +30,8 @@ const Notes = ({navigation}) => {
 
     if (dataApi.status === 200) {
       setNotes(resultApi.notes);
+
+      console.log(resultApi.notes[36].pastQuiz);
     } else {
       Alert.alert('Error', 'Error encountered');
     }
@@ -48,6 +50,7 @@ const Notes = ({navigation}) => {
                 paddingTop: 20,
                 gap: 20,
                 alignItems: 'center',
+                paddingBottom: 50,
               }}>
               <View
                 style={{
@@ -235,61 +238,78 @@ const Notes = ({navigation}) => {
                             </Text>
                           </TouchableOpacity>
                         </View>
-                        <View style={{gap: 5, marginBottom: 10}}>
-                          <Text style={{color: 'black', fontWeight: 'bold'}}>
-                            Past Quiz
-                          </Text>
-                          <View
-                            style={{
-                              flexDirection: 'row',
-                              alignItems: 'center',
-                              gap: 10,
-                            }}>
-                            <View
-                              style={{
-                                flexDirection: 'row',
-                                gap: 10,
-                                alignItems: 'center',
-                                flex: 1,
-                              }}>
-                              <Icon
-                                name="circle"
-                                size={8}
-                                type="material-community"
-                                color="black"
-                              />
-                              <Text>30 Feb 2024, 15:38</Text>
-                            </View>
-                            <View
-                              style={{
-                                backgroundColor: '#148A3C',
-                                paddingVertical: 5,
-                                paddingHorizontal: 10,
-                                borderRadius: 5,
-                              }}>
-                              <Text
+                        {note.pastQuiz.length > 0 ? (
+                          <View style={{gap: 5, marginBottom: 10}}>
+                            <Text style={{color: 'black', fontWeight: 'bold'}}>
+                              Past Quiz
+                            </Text>
+                            {note.pastQuiz.map((quiz, i) => (
+                              <View
+                                key={i}
                                 style={{
-                                  color: 'white',
-                                  fontWeight: 'bold',
+                                  flexDirection: 'row',
+                                  alignItems: 'center',
+                                  gap: 10,
                                 }}>
-                                13 / 20
-                              </Text>
-                            </View>
-                            <TouchableOpacity
-                              style={{
-                                backgroundColor: '#024E9C',
-                                paddingVertical: 5,
-                                paddingHorizontal: 10,
-                                borderRadius: 5,
-                              }}
-                              onPress={() => navigation.navigate('ViewResult')}>
-                              <Text
-                                style={{fontWeight: 'bold', color: 'white'}}>
-                                View Results
-                              </Text>
-                            </TouchableOpacity>
+                                <View
+                                  style={{
+                                    flexDirection: 'row',
+                                    gap: 10,
+                                    alignItems: 'center',
+                                    flex: 1,
+                                  }}>
+                                  <Icon
+                                    name="circle"
+                                    size={8}
+                                    type="material-community"
+                                    color="black"
+                                  />
+                                  <Text>30 Feb 2024, 15:38</Text>
+                                </View>
+                                <View
+                                  style={{
+                                    backgroundColor:
+                                      parseInt(quiz.score.userScore) >
+                                      parseInt(quiz.score.totalQuestion) / 3
+                                        ? '#148A3C'
+                                        : '#E25454',
+                                    paddingVertical: 5,
+                                    paddingHorizontal: 10,
+                                    borderRadius: 5,
+                                  }}>
+                                  <Text
+                                    style={{
+                                      color: 'white',
+                                      fontWeight: 'bold',
+                                    }}>
+                                    {quiz.score.userScore} /{' '}
+                                    {quiz.score.totalQuestion}
+                                  </Text>
+                                </View>
+                                <TouchableOpacity
+                                  style={{
+                                    backgroundColor: '#024E9C',
+                                    paddingVertical: 5,
+                                    paddingHorizontal: 10,
+                                    borderRadius: 5,
+                                  }}
+                                  onPress={() =>
+                                    navigation.navigate('ViewResult')
+                                  }>
+                                  <Text
+                                    style={{
+                                      fontWeight: 'bold',
+                                      color: 'white',
+                                    }}>
+                                    View Results
+                                  </Text>
+                                </TouchableOpacity>
+                              </View>
+                            ))}
                           </View>
-                        </View>
+                        ) : (
+                          <></>
+                        )}
                       </View>
                     ) : (
                       <></>

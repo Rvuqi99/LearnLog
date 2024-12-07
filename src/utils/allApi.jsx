@@ -49,7 +49,7 @@ export const insertNoteApi = async (content, title, subject, topic) => {
   }
 };
 
-export const generateQuestion = async (questionAmount, subject, topic) => {
+export const generateQuestion = async (questionAmount, noteid,subject, topic) => {
   const token = await getTToken();
 
   try {
@@ -63,7 +63,7 @@ export const generateQuestion = async (questionAmount, subject, topic) => {
       body: JSON.stringify({
         questionAmount: questionAmount,
         type: 'request',
-        noteid: '',
+        noteid: noteid,
         answers: [],
         tags: [subject, topic],
         chatid: '',
