@@ -11,12 +11,47 @@ import {
   Image,
   TextInput,
   TouchableOpacity,
+  Alert,
 } from 'react-native';
 import React from 'react';
 import {LearnLogFullLogo} from '../../assets/images/IconSvg';
 import {Divider, Icon} from 'react-native-elements';
+import {useIsFocused} from '@react-navigation/native';
+import {loginApi} from '../../utils/allApi';
+import {setTToken} from '../../../TokenService';
 
 const Login = ({navigation}) => {
+  const isFocused = useIsFocused();
+  const [email, setEmail] = React.useState('test@gmail.com');
+
+  React.useEffect(() => {
+    // Is empty to allow the screen to re-render screen
+  }, [isFocused]);
+
+  const handleLogin = async () => {
+    const fetchApi = await loginApi(email);
+    const dataApi = fetchApi[0];
+    const resultApi = fetchApi[1];
+
+    console.log('This is login Api');
+    console.log(dataApi.status);
+    console.log(resultApi);
+
+    if (dataApi.status === 200) {
+      setTToken(resultApi);
+
+      Alert.alert('Success', 'Successfully login', [
+        {
+          text: 'OK',
+          onPress: () => {
+            navigation.navigate('MainMenu');
+          },
+        },
+      ]);
+    } else {
+      Alert.alert('Error', 'Error encountered');
+    }
+  };
   return (
     <KeyboardAvoidingView
       {...(Platform.OS === 'ios' ? {behavior: 'padding'} : {})}
@@ -58,6 +93,8 @@ const Login = ({navigation}) => {
                       borderRadius: 10,
                       textAlign: 'center',
                     }}
+                    value={email}
+                    onChangeText={text => setEmail(text)}
                     placeholder="Email"
                     placeholderTextColor="#6E6E6E"
                   />
@@ -69,7 +106,7 @@ const Login = ({navigation}) => {
                     borderRadius: 10,
                     alignItems: 'center',
                   }}
-                  onPress={() => navigation.navigate('MainMenu')}>
+                  onPress={() => handleLogin()}>
                   <Text style={{fontWeight: 'bold', color: 'white'}}>
                     Login
                   </Text>
@@ -90,7 +127,7 @@ const Login = ({navigation}) => {
                     justifyContent: 'space-between',
                     paddingHorizontal: 10,
                   }}
-                  onPress={() => navigation.navigate('MainMenu')}>
+                  onPress={() => handleLogin()}>
                   <Icon
                     name="logo-facebook"
                     size={20}
@@ -114,7 +151,7 @@ const Login = ({navigation}) => {
                     borderWidth: 1,
                     borderColor: '#6E6E6E',
                   }}
-                  onPress={() => navigation.navigate('MainMenu')}>
+                  onPress={() => handleLogin()}>
                   <Icon
                     name="logo-google"
                     size={20}

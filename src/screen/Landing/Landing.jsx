@@ -2,6 +2,7 @@ import {SafeAreaView, Animated, Image, Dimensions} from 'react-native';
 import React from 'react';
 import {LearnLogLogo} from '../../assets/images/IconSvg';
 import {useIsFocused} from '@react-navigation/native';
+import {getTToken} from '../../../TokenService';
 
 const Landing = ({navigation}) => {
   const isFocused = useIsFocused();
@@ -31,13 +32,13 @@ const Landing = ({navigation}) => {
   }, [isFocused]);
 
   const handleLoad = async () => {
-    // const token = await getTToken();
+    const token = await getTToken();
 
-    // if (token === undefined) {
-    navigation.navigate('Login');
-    // } else {
-    //   navigation.navigate('MainMenu');
-    // }
+    if (token === undefined) {
+      navigation.navigate('Login');
+    } else {
+      navigation.navigate('MainMenu');
+    }
   };
 
   return (
