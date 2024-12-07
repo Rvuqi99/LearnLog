@@ -33,10 +33,6 @@ const Login = ({navigation}) => {
     const dataApi = fetchApi[0];
     const resultApi = fetchApi[1];
 
-    console.log('This is login Api');
-    console.log(dataApi.status);
-    console.log(resultApi);
-
     if (dataApi.status === 200) {
       setTToken(resultApi);
 

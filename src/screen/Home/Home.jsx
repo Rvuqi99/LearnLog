@@ -9,11 +9,123 @@ import {
   ScrollView,
   TouchableOpacity,
   TextInput,
+  ActivityIndicator,
 } from 'react-native';
 import React from 'react';
 import {Divider} from 'react-native-elements';
+import {
+  generateQuestion,
+  insertNoteApi,
+  submitAnswer,
+} from '../../utils/allApi';
 
 const Home = () => {
+  const [title, setTitle] = React.useState('Plant');
+  const [subject, setSubject] = React.useState('Science');
+  const [topic, setTopic] = React.useState('Topic');
+  const [totalQues, setTotalQues] = React.useState('5');
+  const [isLoading, setIsLoading] = React.useState(false);
+  const [isLoading2, setIsLoading2] = React.useState(false);
+  const [content, setContent] = React.useState(
+    'Plants are living organisms that play a crucial role in sustaining life on Earth. They belong to the kingdom Plantae and are essential for producing oxygen, food, and habitats for countless species, including humans.',
+  );
+  const [chatId, setChatId] = React.useState();
+  const [questions, setQuestions] = React.useState();
+
+  const validate = () => {
+    if (
+      title !== null ||
+      title !== '' ||
+      subject !== null ||
+      subject !== '' ||
+      topic !== null ||
+      topic !== '' ||
+      totalQues !== null ||
+      totalQues !== '' ||
+      content !== null ||
+      content !== ''
+    ) {
+      handleGenerateQuestion();
+    } else {
+      Alert.alert('Error', 'Fill in all required fields!');
+    }
+  };
+
+  const handleGenerateQuestion = async () => {
+    setIsLoading(true);
+    const fetchApi = await insertNoteApi(content, title, subject, topic);
+    const dataApi = fetchApi[0];
+    const resultApi = fetchApi[1];
+
+    if (dataApi.status === 200) {
+      console.log('generating question');
+      const fetchApi2 = await generateQuestion(totalQues, subject, topic);
+      const dataApi2 = fetchApi2[0];
+      const resultApi2 = fetchApi2[1];
+
+      if (dataApi2.status === 200) {
+        console.log(resultApi2);
+        setChatId(resultApi2.chatId);
+        setQuestions(resultApi2.question);
+
+        if (
+          resultApi2.chatId !== null ||
+          resultApi2.chatId !== '' ||
+          resultApi2.chatId !== undefined ||
+          resultApi2.question !== null ||
+          resultApi2.question !== '' ||
+          resultApi2.question !== undefined
+        ) {
+          setIsLoading(false);
+        }
+      } else {
+        Alert.alert('Error', 'Error encountered');
+        setIsLoading(false);
+      }
+    } else {
+      Alert.alert('Error', 'Error encountered');
+      setIsLoading(false);
+    }
+  };
+
+  const onChangeAnswer = (index, text) => {
+    const myQuestions = [...questions];
+    const newQuestions = myQuestions.map((quest, i) => {
+      if (index === i) {
+        return {...quest, userAnswer: text};
+      } else {
+        return quest;
+      }
+    });
+
+    setQuestions(newQuestions);
+  };
+
+  const handleSubmit = async () => {
+    setIsLoading2(true);
+    const fetchApi = await submitAnswer(
+      totalQues,
+      '',
+      questions,
+      subject,
+      topic,
+      chatId,
+    );
+    const dataApi = fetchApi[0];
+    const resultApi = fetchApi[1];
+
+    console.log(dataApi);
+    console.log(resultApi);
+    if (dataApi.status === 200) {
+      setIsLoading2(false);
+
+      console.log(resultApi.analysis);
+    } else {
+      Alert.alert('Error', 'Error encountered');
+      setIsLoading2(false);
+    }
+  };
+
   return (
     <KeyboardAvoidingView
       {...(Platform.OS === 'ios' ? {behavior: 'padding'} : {})}
@@ -90,13 +202,15 @@ const Home = () => {
                   placeholder="Type your chapter/topic summary here...."
                   placeholderTextColor="black"
                   multiline
+                  value={content}
+                  onChangeText={text => setContent(text)}
                 />
                 <Divider
                   style={{flex: 1, borderColor: '#6E6E6E', marginVertical: 10}}
                 />
                 <View
                   style={{flexDirection: 'row', alignItems: 'center', gap: 5}}>
-                  <Text style={{flex: 0.3}}>Title: </Text>
+                  <Text style={{flex: 0.3}}>Title* : </Text>
                   <TextInput
                     style={{
                       paddingHorizontal: 10,
@@ -107,11 +221,13 @@ const Home = () => {
                       flex: 0.7,
                       color: 'black',
                     }}
+                    value={title}
+                    onChangeText={text => setTitle(text)}
                   />
                 </View>
                 <View
                   style={{flexDirection: 'row', alignItems: 'center', gap: 5}}>
-                  <Text style={{flex: 0.3}}>Subject: </Text>
+                  <Text style={{flex: 0.3}}>Subject* : </Text>
                   <TextInput
                     style={{
                       paddingHorizontal: 10,
@@ -122,11 +238,13 @@ const Home = () => {
                       flex: 0.7,
                       color: 'black',
                     }}
+                    value={subject}
+                    onChangeText={text => setSubject(text)}
                   />
                 </View>
                 <View
                   style={{flexDirection: 'row', alignItems: 'center', gap: 5}}>
-                  <Text style={{flex: 0.3}}>Chapter/Topic: </Text>
+                  <Text style={{flex: 0.3}}>Chapter/Topic* : </Text>
                   <TextInput
                     style={{
                       paddingHorizontal: 10,
@@ -137,6 +255,8 @@ const Home = () => {
                       flex: 0.7,
                       color: 'black',
                     }}
+                    value={topic}
+                    onChangeText={text => setTopic(text)}
                   />
                 </View>
                 <View
@@ -145,7 +265,7 @@ const Home = () => {
                     alignItems: 'center',
                     gap: 5,
                   }}>
-                  <Text style={{flex: 0.3}}>Total Questions: </Text>
+                  <Text style={{flex: 0.3}}>Total Questions* : </Text>
                   <TextInput
                     style={{
                       paddingHorizontal: 10,
@@ -156,6 +276,8 @@ const Home = () => {
                       flex: 0.7,
                       color: 'black',
                     }}
+                    value={totalQues}
+                    onChangeText={text => setTotalQues(text)}
                   />
                 </View>
               </View>
@@ -173,49 +295,97 @@ const Home = () => {
                   shadowOpacity: 0.2,
                   shadowRadius: 1,
                   marginBottom: 10,
-                }}>
-                <Text
-                  style={{
-                    color: 'white',
-                    textAlign: 'center',
-                    fontWeight: 'bold',
-                  }}>
-                  Generate Questions
-                </Text>
+                }}
+                disabled={isLoading}
+                onPress={() => validate()}>
+                {isLoading ? (
+                  <ActivityIndicator color="white" />
+                ) : (
+                  <Text
+                    style={{
+                      color: 'white',
+                      textAlign: 'center',
+                      fontWeight: 'bold',
+                    }}>
+                    Generate Questions
+                  </Text>
+                )}
               </TouchableOpacity>
-              <View
-                style={{
-                  backgroundColor: 'white',
-                  width: '100%',
-                  padding: 20,
-                  gap: 20,
-                  height: '100%'
-                }}>
-                <Text
-                  style={{color: '#024E9C', fontSize: 20, fontWeight: 'bold'}}>
-                  Quiz: 15 questions
-                </Text>
-                <View style={{flexDirection: 'row', gap: 5}}>
-                  <Text style={{color: 'black', fontWeight: 500}}>1.</Text>
-                  <View style={{gap: 5, flex: 1}}>
-                    <Text style={{color: 'black', fontWeight: 500}}>
-                      What is the name of my pet?
-                    </Text>
-                    <Text style={{color: '#6E6E6E'}}>Answer:</Text>
-                    <TextInput
-                      style={{
-                        paddingHorizontal: 10,
-                        paddingVertical: 10,
-                        borderRadius: 10,
-                        borderColor: '#6E6E6E',
-                        borderWidth: 1,
-                        flex: 0.7,
-                        color: 'black',
-                      }}
-                    />
-                  </View>
+              {questions && chatId && (
+                <View
+                  style={{
+                    backgroundColor: 'white',
+                    width: '100%',
+                    padding: 20,
+                    gap: 20,
+                    height: '100%',
+                  }}>
+                  <Text
+                    style={{
+                      color: '#024E9C',
+                      fontSize: 20,
+                      fontWeight: 'bold',
+                    }}>
+                    Quiz: {totalQues} questions
+                  </Text>
+                  {questions.map((question, index) => (
+                    <View key={index} style={{flexDirection: 'row', gap: 5}}>
+                      <Text style={{color: 'black', fontWeight: 500}}>
+                        {index + 1}
+                      </Text>
+                      <View style={{gap: 5, flex: 1}}>
+                        <Text style={{color: 'black', fontWeight: 500}}>
+                          {question.question}
+                        </Text>
+                        <Text style={{color: '#6E6E6E'}}>Answer:</Text>
+                        <TextInput
+                          style={{
+                            paddingHorizontal: 10,
+                            paddingVertical: 10,
+                            borderRadius: 10,
+                            borderColor: '#6E6E6E',
+                            borderWidth: 1,
+                            flex: 0.7,
+                            color: 'black',
+                          }}
+                          value={question.userAnswer}
+                          onChangeText={text => onChangeAnswer(index, text)}
+                        />
+                      </View>
+                    </View>
+                  ))}
+                  <TouchableOpacity
+                    style={{
+                      borderRadius: 10,
+                      alignItems: 'center',
+                      justifyContent: 'center',
+                      paddingVertical: 10,
+                      width: '100%',
+                      backgroundColor: '#024E9C',
+                      elevation: 2,
+                      shadowColor: 'black',
+                      shadowOffset: {width: 0, height: 1},
+                      shadowOpacity: 0.2,
+                      shadowRadius: 1,
+                      marginBottom: 10,
+                    }}
+                    disabled={isLoading2}
+                    onPress={() => handleSubmit()}>
+                    {isLoading2 ? (
+                      <ActivityIndicator color="white" />
+                    ) : (
+                      <Text
+                        style={{
+                          color: 'white',
+                          textAlign: 'center',
+                          fontWeight: 'bold',
+                        }}>
+                        Submit
+                      </Text>
+                    )}
+                  </TouchableOpacity>
                 </View>
-              </View>
+              )}
             </View>
           </ScrollView>
         </SafeAreaView>
@@ -225,3 +395,55 @@ const Home = () => {
 };
 
 export default Home;
+
+const adssad = {
+  questions: [
+    {
+      explanation:
+        'The basic principles of scientific inquiry include observation, questioning, forming a hypothesis, conducting experiments, analyzing data, and drawing conclusions. It emphasizes evidence-based reasoning and the continuous testing of ideas.',
+      isCorrect: false,
+      question: 'What are the basic principles of scientific inquiry?',
+      userAnswer: 'not sure',
+    },
+    {
+      explanation:
+        'The scientific method provides a systematic, organized approach to inquiry that allows scientists to test hypotheses, gather data, and draw reliable conclusions. It minimizes bias and increases the reliability of findings, facilitating advancements in knowledge.',
+      isCorrect: false,
+      question:
+        'How does the scientific method contribute to scientific discoveries?',
+      userAnswer: 'not sure',
+    },
+    {
+      explanation:
+        'A hypothesis is a tentative explanation or prediction that can be tested through experimentation. A theory, on the other hand, is a well-substantiated explanation of an aspect of the natural world that is based on a body of evidence and has stood up to repeated testing.',
+      isCorrect: false,
+      question: 'What is the difference between a hypothesis and a theory?',
+      userAnswer: 'not sure',
+    },
+    {
+      explanation:
+        'Experimentation is crucial in science as it allows researchers to test hypotheses under controlled conditions, manipulate variables, and observe outcomes. This process leads to validation or rejection of hypotheses and further understanding of scientific principles.',
+      isCorrect: false,
+      question: 'Why is experimentation important in science?',
+      userAnswer: 'not sure',
+    },
+    {
+      explanation:
+        'Peer review plays a vital role in the scientific community as it ensures that research is evaluated by other experts in the field before being published. This process adds credibility, allows for constructive feedback, and helps maintain the integrity of scientific literature.',
+      isCorrect: false,
+      question: 'What role do peer reviews play in the scientific community?',
+      userAnswer: 'not sure',
+    },
+  ],
+  score: {totalQuestion: '5', userScore: '0'},
+};
+
+const asdads = {
+  analysis: {
+    questions: [[Object], [Object], [Object], [Object], [Object]],
+    score: {totalQuestion: '5', userScore: '0'},
+  },
+  chatId: '402640c7-8976-4ea4-b37a-04bf9882e895',
+  question: null,
+  type: 'analysis',
+};
