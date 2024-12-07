@@ -13,7 +13,7 @@ import {
 import React from 'react';
 import {Icon} from 'react-native-elements';
 
-const Notes = () => {
+const Notes = ({navigation}) => {
   return (
     <KeyboardAvoidingView
       {...(Platform.OS === 'ios' ? {behavior: 'padding'} : {})}
@@ -215,9 +215,9 @@ const Notes = () => {
                           flex: 1,
                         }}>
                         <Icon
-                          name="caretright"
-                          size={10}
-                          type="antdesign"
+                          name="circle"
+                          size={8}
+                          type="material-community"
                           color="black"
                         />
                         <Text>30 Feb 2024, 15:38</Text>
@@ -243,7 +243,8 @@ const Notes = () => {
                           paddingVertical: 5,
                           paddingHorizontal: 10,
                           borderRadius: 5,
-                        }}>
+                        }}
+                        onPress={() => navigation.navigate('ViewResult')}>
                         <Text style={{fontWeight: 'bold', color: 'white'}}>
                           View Results
                         </Text>
