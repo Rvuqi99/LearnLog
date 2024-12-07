@@ -31,7 +31,7 @@ const Notes = ({navigation}) => {
     if (dataApi.status === 200) {
       setNotes(resultApi.notes);
 
-      console.log(resultApi.notes[36].pastQuiz);
+      // console.log(resultApi.notes[36].pastQuiz[0].questions);
     } else {
       Alert.alert('Error', 'Error encountered');
     }
@@ -294,7 +294,7 @@ const Notes = ({navigation}) => {
                                     borderRadius: 5,
                                   }}
                                   onPress={() =>
-                                    navigation.navigate('ViewResult')
+                                    navigation.navigate('ViewResult', quiz)
                                   }>
                                   <Text
                                     style={{
