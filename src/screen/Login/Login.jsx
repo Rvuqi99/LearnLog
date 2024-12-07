@@ -16,7 +16,7 @@ import React from 'react';
 import {LearnLogFullLogo} from '../../assets/images/IconSvg';
 import {Divider, Icon} from 'react-native-elements';
 
-const Login = () => {
+const Login = ({navigation}) => {
   return (
     <KeyboardAvoidingView
       {...(Platform.OS === 'ios' ? {behavior: 'padding'} : {})}
@@ -68,7 +68,8 @@ const Login = () => {
                     paddingVertical: 10,
                     borderRadius: 10,
                     alignItems: 'center',
-                  }}>
+                  }}
+                  onPress={() => navigation.navigate('MainMenu')}>
                   <Text style={{fontWeight: 'bold', color: 'white'}}>
                     Login
                   </Text>
@@ -88,7 +89,8 @@ const Login = () => {
                     flexDirection: 'row',
                     justifyContent: 'space-between',
                     paddingHorizontal: 10,
-                  }}>
+                  }}
+                  onPress={() => navigation.navigate('MainMenu')}>
                   <Icon
                     name="logo-facebook"
                     size={20}
@@ -111,7 +113,8 @@ const Login = () => {
                     paddingHorizontal: 10,
                     borderWidth: 1,
                     borderColor: '#6E6E6E',
-                  }}>
+                  }}
+                  onPress={() => navigation.navigate('MainMenu')}>
                   <Icon
                     name="logo-google"
                     size={20}
