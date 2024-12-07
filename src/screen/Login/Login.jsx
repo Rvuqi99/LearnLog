@@ -22,7 +22,7 @@ const Login = ({navigation}) => {
       {...(Platform.OS === 'ios' ? {behavior: 'padding'} : {})}
       style={{flex: 1}}>
       <TouchableWithoutFeedback onPress={Keyboard.dismiss} accessible={false}>
-        <SafeAreaView style={{flex: 1, backgroundColor: '#D2D2D2'}}>
+        <SafeAreaView style={{flex: 1, backgroundColor: '#EDEDED'}}>
           <ScrollView>
             <View
               onStartShouldSetResponder={() => true}

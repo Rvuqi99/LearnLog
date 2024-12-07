@@ -1,9 +1,4 @@
-import {
-  SafeAreaView,
-  Animated,
-  Image,
-  Dimensions,
-} from 'react-native';
+import {SafeAreaView, Animated, Image, Dimensions} from 'react-native';
 import React from 'react';
 import {LearnLogLogo} from '../../assets/images/IconSvg';
 import {useIsFocused} from '@react-navigation/native';
@@ -49,7 +44,7 @@ const Landing = ({navigation}) => {
     <SafeAreaView
       style={{
         flex: 1,
-        backgroundColor: '#D2D2D2',
+        backgroundColor: '#EDEDED',
         alignItems: 'center',
         justifyContent: 'center',
       }}>
