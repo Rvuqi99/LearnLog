@@ -4,7 +4,6 @@ import {
   SafeAreaView,
   ScrollView,
   TouchableOpacity,
-  TextInput,
   ActivityIndicator,
 } from 'react-native';
 import React from 'react';
@@ -35,7 +34,7 @@ const ViewQuizResult = ({navigation}) => {
               }}>
               <View
                 style={{flexDirection: 'row', alignItems: 'center', gap: 20}}>
-                <TouchableOpacity onPress={() => navigation.goBack()}>
+                <TouchableOpacity onPress={() => navigation.popToTop()}>
                   <Icon
                     name="arrow-left"
                     type="octicon"
@@ -142,7 +141,7 @@ const ViewQuizResult = ({navigation}) => {
                 shadowRadius: 1,
                 marginVertical: 30,
               }}
-              onPress={() => navigation.goBack()}>
+              onPress={() => navigation.popToTop()}>
               <Text
                 style={{
                   color: 'white',

@@ -10,6 +10,7 @@ import {
   TouchableOpacity,
   TextInput,
   ActivityIndicator,
+  Alert,
 } from 'react-native';
 import React from 'react';
 import {Divider} from 'react-native-elements';
@@ -60,7 +61,6 @@ const Home = ({navigation}) => {
 
     if (dataApi.status === 200) {
       setNoteId(resultApi.noteid);
-      console.log('generating question');
       const fetchApi2 = await generateQuestion(
         totalQues,
         resultApi.noteid,
@@ -71,7 +71,6 @@ const Home = ({navigation}) => {
       const resultApi2 = fetchApi2[1];
 
       if (dataApi2.status === 200) {
-        console.log(resultApi2);
         setChatId(resultApi2.chatId);
         setQuestions(resultApi2.question);
 
@@ -84,6 +83,7 @@ const Home = ({navigation}) => {
           resultApi2.question !== undefined
         ) {
           setIsLoading(false);
+          Alert.alert('Success', 'Question generated successfully!');
         }
       } else {
         Alert.alert('Error', 'Error encountered');
@@ -121,12 +121,9 @@ const Home = ({navigation}) => {
     const dataApi = fetchApi[0];
     const resultApi = fetchApi[1];
 
-    console.log(dataApi);
-    console.log(resultApi);
     if (dataApi.status === 200) {
       setIsLoading2(false);
 
-      console.log(resultApi.analysis);
       navigation.navigate('ViewQuizResult', resultApi);
 
       setTitle('');

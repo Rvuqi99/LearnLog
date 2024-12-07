@@ -4,7 +4,6 @@ import {
   SafeAreaView,
   ScrollView,
   TouchableOpacity,
-  TextInput,
   ActivityIndicator,
 } from 'react-native';
 import React from 'react';
