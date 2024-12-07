@@ -19,7 +19,7 @@ import {
   submitAnswer,
 } from '../../utils/allApi';
 
-const Home = () => {
+const Home = ({navigation}) => {
   const [title, setTitle] = React.useState('Plant');
   const [subject, setSubject] = React.useState('Science');
   const [topic, setTopic] = React.useState('Topic');
@@ -120,6 +120,15 @@ const Home = () => {
       setIsLoading2(false);
 
       console.log(resultApi.analysis);
+      navigation.navigate('ViewQuizResult', resultApi);
+
+      setTitle('');
+      setSubject('');
+      setTopic('');
+      setTotalQues('');
+      setContent('');
+      setChatId('');
+      setQuestions();
     } else {
       Alert.alert('Error', 'Error encountered');
       setIsLoading2(false);
@@ -294,7 +303,7 @@ const Home = () => {
                   shadowOffset: {width: 0, height: 1},
                   shadowOpacity: 0.2,
                   shadowRadius: 1,
-                  marginBottom: 10,
+                  marginBottom: 30,
                 }}
                 disabled={isLoading}
                 onPress={() => validate()}>
@@ -331,7 +340,7 @@ const Home = () => {
                   {questions.map((question, index) => (
                     <View key={index} style={{flexDirection: 'row', gap: 5}}>
                       <Text style={{color: 'black', fontWeight: 500}}>
-                        {index + 1}
+                        {index + 1}.
                       </Text>
                       <View style={{gap: 5, flex: 1}}>
                         <Text style={{color: 'black', fontWeight: 500}}>
@@ -395,55 +404,3 @@ const Home = () => {
 };
 
 export default Home;
-
-const adssad = {
-  questions: [
-    {
-      explanation:
-        'The basic principles of scientific inquiry include observation, questioning, forming a hypothesis, conducting experiments, analyzing data, and drawing conclusions. It emphasizes evidence-based reasoning and the continuous testing of ideas.',
-      isCorrect: false,
-      question: 'What are the basic principles of scientific inquiry?',
-      userAnswer: 'not sure',
-    },
-    {
-      explanation:
-        'The scientific method provides a systematic, organized approach to inquiry that allows scientists to test hypotheses, gather data, and draw reliable conclusions. It minimizes bias and increases the reliability of findings, facilitating advancements in knowledge.',
-      isCorrect: false,
-      question:
-        'How does the scientific method contribute to scientific discoveries?',
-      userAnswer: 'not sure',
-    },
-    {
-      explanation:
-        'A hypothesis is a tentative explanation or prediction that can be tested through experimentation. A theory, on the other hand, is a well-substantiated explanation of an aspect of the natural world that is based on a body of evidence and has stood up to repeated testing.',
-      isCorrect: false,
-      question: 'What is the difference between a hypothesis and a theory?',
-      userAnswer: 'not sure',
-    },
-    {
-      explanation:
-        'Experimentation is crucial in science as it allows researchers to test hypotheses under controlled conditions, manipulate variables, and observe outcomes. This process leads to validation or rejection of hypotheses and further understanding of scientific principles.',
-      isCorrect: false,
-      question: 'Why is experimentation important in science?',
-      userAnswer: 'not sure',
-    },
-    {
-      explanation:
-        'Peer review plays a vital role in the scientific community as it ensures that research is evaluated by other experts in the field before being published. This process adds credibility, allows for constructive feedback, and helps maintain the integrity of scientific literature.',
-      isCorrect: false,
-      question: 'What role do peer reviews play in the scientific community?',
-      userAnswer: 'not sure',
-    },
-  ],
-  score: {totalQuestion: '5', userScore: '0'},
-};
-
-const asdads = {
-  analysis: {
-    questions: [[Object], [Object], [Object], [Object], [Object]],
-    score: {totalQuestion: '5', userScore: '0'},
-  },
-  chatId: '402640c7-8976-4ea4-b37a-04bf9882e895',
-  question: null,
-  type: 'analysis',
-};
