@@ -113,3 +113,24 @@ export const submitAnswer = async (
     console.log('Error when fetching API' + error);
   }
 };
+
+export const getNotesAPI = async () => {
+  const token = await getTToken();
+
+  try {
+    const dataRequests = {
+      method: 'GET',
+      headers: {
+        Accept: 'application/json',
+        'Content-Type': 'application/json',
+        Authorization: 'Bearer ' + token,
+      },
+    };
+    const data = await fetch(`${API_ORIGIN}/noteList`, dataRequests);
+    const result = await data.json();
+
+    return [data, result];
+  } catch (error) {
+    console.log('Error when fetching API' + error);
+  }
+};
