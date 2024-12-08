@@ -38,6 +38,7 @@ export const insertNoteApi = async (content, title, subject, topic) => {
         title: title,
         isPublic: false,
         tags: [subject, topic],
+        filename: '',
       }),
     };
     const data = await fetch(`${API_ORIGIN}/noteinsert`, dataRequests);
