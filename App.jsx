@@ -4,9 +4,14 @@ import {createNativeStackNavigator} from '@react-navigation/native-stack';
 import Landing from './src/screen/Landing/Landing';
 import Login from './src/screen/Login/Login';
 import MainMenu from './src/screen/MainMenu';
+import {Appearance} from 'react-native';
 
 const Stack = createNativeStackNavigator();
 const App = () => {
+  React.useEffect(() => {
+    Appearance.setColorScheme('light');
+  }, []);
+
   return (
     <NavigationContainer>
       <Stack.Navigator initialRouteName="Landing">

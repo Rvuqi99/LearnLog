@@ -11,6 +11,7 @@ import {
   TextInput,
   ActivityIndicator,
   Alert,
+  PermissionsAndroid,
 } from 'react-native';
 import React from 'react';
 import {Divider} from 'react-native-elements';
@@ -19,8 +20,11 @@ import {
   insertNoteApi,
   submitAnswer,
 } from '../../utils/allApi';
+import {useIsFocused} from '@react-navigation/native';
+import DocumentPicker from 'react-native-document-picker';
 
 const Home = ({navigation}) => {
+  const isFocused = useIsFocused();
   const [title, setTitle] = React.useState('Plant');
   const [subject, setSubject] = React.useState('Science');
   const [topic, setTopic] = React.useState('Topic');
@@ -33,6 +37,11 @@ const Home = ({navigation}) => {
   const [chatId, setChatId] = React.useState();
   const [questions, setQuestions] = React.useState();
   const [noteId, setNoteId] = React.useState();
+  const [note, setNote] = React.useState();
+
+  React.useEffect(() => {
+    getStoragePermission();
+  }, [isFocused]);
 
   const validate = () => {
     if (
@@ -139,6 +148,37 @@ const Home = ({navigation}) => {
     }
   };
 
+  const getStoragePermission = async () => {
+    if (Platform.OS === 'ios') {
+      console.log('Permission Granted');
+    } else {
+      if (Number(Platform.Version) < 33) {
+        try {
+          const granted = await PermissionsAndroid.request(
+            PermissionsAndroid.PERMISSIONS.WRITE_EXTERNAL_STORAGE,
+            {
+              title: 'Storage Permission Required',
+              message:
+                'Application needs access to your storage to download File',
+            },
+          );
+          if (granted === PermissionsAndroid.RESULTS.GRANTED) {
+            // Start downloading
+            console.log('Storage Permission Granted.');
+          } else {
+            // If permission denied then show alert
+            Alert.alert(
+              'Error',
+              'Storage Permission Not Granted to Download File',
+            );
+          }
+        } catch (err) {
+          // To handle permission related exception
+          console.log('++++' + err);
+        }
+      }
+    }
+  };
   return (
     <KeyboardAvoidingView
       {...(Platform.OS === 'ios' ? {behavior: 'padding'} : {})}
