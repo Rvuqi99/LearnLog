@@ -10,11 +10,13 @@ import {
   TouchableOpacity,
   TextInput,
   ActivityIndicator,
+  Alert,
 } from 'react-native';
 import React from 'react';
 import {Icon} from 'react-native-elements';
 import {getNotesAPI} from '../../utils/allApi';
 import {useIsFocused} from '@react-navigation/native';
+import dayjs from 'dayjs';
 
 const Notes = ({navigation}) => {
   const isFocused = useIsFocused();
@@ -32,8 +34,6 @@ const Notes = ({navigation}) => {
 
     if (dataApi.status === 200) {
       setNotes(resultApi.notes);
-
-      // console.log(resultApi.notes[36].pastQuiz[0].questions);
     } else {
       Alert.alert('Error', 'Error encountered');
     }
@@ -269,7 +269,11 @@ const Notes = ({navigation}) => {
                                     type="material-community"
                                     color="black"
                                   />
-                                  <Text>30 Feb 2024, 15:38</Text>
+                                  <Text>
+                                    {dayjs(quiz.completedDate).format(
+                                      'D MMMM YYYY, HH:mmA',
+                                    )}
+                                  </Text>
                                 </View>
                                 <View
                                   style={{

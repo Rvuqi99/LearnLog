@@ -134,3 +134,32 @@ export const getNotesAPI = async () => {
     console.log('Error when fetching API' + error);
   }
 };
+
+export const trackTopicAPI = async (
+    question,
+    subject
+  ) => {
+    const token = await getTToken();
+  
+    try {
+      const dataRequests = {
+        method: 'POST',
+        headers: {
+          Accept: 'application/json',
+          'Content-Type': 'application/json',
+          Authorization: 'Bearer ' + token,
+        },
+        body: JSON.stringify({
+          question: question,
+          subject: subject,
+        }),
+      };
+      const data = await fetch(`${API_ORIGIN}/topictracking`, dataRequests);
+      const result = await data.json();
+  
+      return [data, result];
+    } catch (error) {
+      console.log('Error when fetching API' + error);
+    }
+  };
+  

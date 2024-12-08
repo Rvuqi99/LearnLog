@@ -36,15 +36,15 @@ const Home = ({navigation}) => {
 
   const validate = () => {
     if (
-      title !== null ||
-      title !== '' ||
-      subject !== null ||
-      subject !== '' ||
-      topic !== null ||
-      topic !== '' ||
-      totalQues !== null ||
-      totalQues !== '' ||
-      content !== null ||
+      title !== null &&
+      title !== '' &&
+      subject !== null &&
+      subject !== '' &&
+      topic !== null &&
+      topic !== '' &&
+      totalQues !== null &&
+      totalQues !== '' &&
+      content !== null &&
       content !== ''
     ) {
       handleGenerateQuestion();
@@ -75,11 +75,11 @@ const Home = ({navigation}) => {
         setQuestions(resultApi2.question);
 
         if (
-          resultApi2.chatId !== null ||
-          resultApi2.chatId !== '' ||
-          resultApi2.chatId !== undefined ||
-          resultApi2.question !== null ||
-          resultApi2.question !== '' ||
+          resultApi2.chatId !== null &&
+          resultApi2.chatId !== '' &&
+          resultApi2.chatId !== undefined &&
+          resultApi2.question !== null &&
+          resultApi2.question !== '' &&
           resultApi2.question !== undefined
         ) {
           setIsLoading(false);

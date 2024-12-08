@@ -18,7 +18,7 @@ import {LearnLogFullLogo} from '../../assets/images/IconSvg';
 import {Divider, Icon} from 'react-native-elements';
 import {useIsFocused} from '@react-navigation/native';
 import {loginApi} from '../../utils/allApi';
-import {setTToken} from '../../../TokenService';
+import {setTEmail, setTToken} from '../../../TokenService';
 
 const Login = ({navigation}) => {
   const isFocused = useIsFocused();
@@ -35,7 +35,8 @@ const Login = ({navigation}) => {
 
     if (dataApi.status === 200) {
       setTToken(resultApi);
-
+      setTEmail(email);
+      
       Alert.alert('Success', 'Successfully login', [
         {
           text: 'OK',

@@ -34,3 +34,38 @@ export const removeToken = async () => {
 
   console.log('Remove Pref Token Success');
 };
+
+export const setTEmail = async token => {
+  try {
+    await EncryptedStorage.setItem('email', token);
+    console.log('Set Pref Email Success');
+  } catch (e) {
+    // saving error
+    console.log('Set Pref Email Error' + e);
+  }
+};
+
+export const getTEmail = async () => {
+  try {
+    const value = await EncryptedStorage.getItem('email');
+    console.log('Get Pref Email Success');
+
+    if (value !== null) {
+      return value;
+    }
+  } catch (e) {
+    // error reading value
+    console.log('Get Pref Email Error ' + e);
+  }
+};
+
+export const removeTEmail = async () => {
+  try {
+    await EncryptedStorage.removeItem('email');
+  } catch (e) {
+    // remove error
+    console.log('Remove Pref Email Error ' + e);
+  }
+
+  console.log('Remove Pref Email Success');
+};
